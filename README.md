@@ -1,2 +1,2 @@
 # balance-service-springboot
-Balance Demo Service
+Balance Demo Service Spring Boot
