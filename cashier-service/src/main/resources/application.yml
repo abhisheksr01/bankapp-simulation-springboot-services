@@ -1,0 +1,11 @@
+server:
+  port: 8092
+  servlet:
+    contextPath: /cashier
+
+account:
+  getEndpoint: http://localhost:8091/account/search/{accountNumber}
+
+kafka:
+  bootstrapAddress: http://localhost:9092
+  topicName: transaction

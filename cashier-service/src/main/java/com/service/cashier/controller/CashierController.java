@@ -1,0 +1,27 @@
+package com.service.cashier.controller;
+
+import com.service.cashier.model.TransactionVO;
+import com.service.cashier.service.CashierService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+@Slf4j
+@RestController
+public class CashierController {
+
+    private CashierService cashierService;
+
+    public CashierController(CashierService cashierService) {
+        this.cashierService = cashierService;
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/create")
+    public void create(@RequestBody TransactionVO transaction) {
+        this.cashierService.create(transaction);
+    }
+}

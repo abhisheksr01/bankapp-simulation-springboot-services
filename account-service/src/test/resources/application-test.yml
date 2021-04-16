@@ -1,0 +1,7 @@
+server:
+  port: 7092
+  servlet:
+    contextPath: /account
+
+customer:
+  getEndpoint: http://localhost:8005/customer/search/{customerId}

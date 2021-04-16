@@ -1,0 +1,119 @@
+buildscript {
+    configurations.maybeCreate("pitest")
+    dependencies {
+        classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.4.6'
+        pitest 'org.pitest:pitest-junit5-plugin:0.10'
+    }
+}
+plugins {
+    id 'org.springframework.boot' version '2.2.2.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'java'
+    id 'jacoco'
+    id 'info.solidsoft.pitest' version '1.4.6'
+}
+
+group = 'com.service'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    mapstructVersion = "1.3.1.Final"
+    lombokVersion = "1.18.8"
+    ioCucumberVersion = "5.6.0"
+    swaggerVersion = "2.9.2"
+    jacocoVersion = "0.8.5"
+    postgresEmbedTest = "1.5.3"
+    wireMockVersion = "2.25.1"
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+    // Postgres database
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    runtimeOnly 'org.postgresql:postgresql'
+    testImplementation "io.zonky.test:embedded-database-spring-test:${postgresEmbedTest}"
+    // Cucumber Dependencies for BDD
+    testImplementation "io.cucumber:cucumber-java:${ioCucumberVersion}"
+    testImplementation "io.cucumber:cucumber-junit:${ioCucumberVersion}"
+    testImplementation "io.cucumber:cucumber-spring:${ioCucumberVersion}"
+    testCompile group: 'io.rest-assured', name: 'rest-assured', version: '4.3.0'
+    //WireMock Dependencies
+    testCompile "com.github.tomakehurst:wiremock:${wireMockVersion}"
+    //Lombok Dependencies
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    //MapStruct Dependencies
+    compile "org.mapstruct:mapstruct:${mapstructVersion}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+    testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+    //Swagger
+    compile "io.springfox:springfox-swagger2:${swaggerVersion}"
+    compile "io.springfox:springfox-swagger-ui:${swaggerVersion}"
+}
+
+test {
+    if (project.hasProperty('excludee2e')) {
+        exclude '**/*e2e*'
+    }
+    useJUnitPlatform()
+}
+// Jacoco for Code Coverage
+jacoco {
+    toolVersion = "${jacocoVersion}"
+    reportsDir = file("$buildDir/customJacocoReportDir")
+}
+
+build {
+    finalizedBy jacocoTestReport
+    finalizedBy jacocoTestCoverageVerification
+}
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination file("${buildDir}/reports/jacocoHtml")
+    }
+//    afterEvaluate {
+//        classDirectories.setFrom(files(classDirectories.files.collect {
+//            fileTree(dir: it,
+//                    exclude: ['**/mapper/**']
+//            )
+//        }))
+//    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 1.0
+            }
+        }
+
+        rule {
+            enabled = false
+            element = 'CLASS'
+            includes = ['org.gradle.*']
+
+            limit {
+                counter = 'LINE'
+                value = 'TOTALCOUNT'
+                maximum = 1.0
+            }
+        }
+    }
+}
+apply plugin: "info.solidsoft.pitest"
+pitest {
+    pitestVersion = "1.4.9"
+    testPlugin = "junit5"
+    targetClasses = ['com.service.account.*']  // by default "${project.group}.*"
+    targetTests = ['com.service.account.*']  // by default "${project.group}.*"
+}
