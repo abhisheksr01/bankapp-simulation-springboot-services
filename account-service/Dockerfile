@@ -1,4 +1,4 @@
-FROM openjdk:8-jre-alpine
+FROM openjdk:18.0-jdk
 WORKDIR /opt
 ENV PORT 8080
 EXPOSE 8080
