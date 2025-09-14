@@ -8,12 +8,18 @@ on:
       - main
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
 
 jobs:
-  build:
+  build-test:
+    strategy:
+      matrix:
+        include:
+          - app-name: "account-service"
+          - app-name: "balance-service"
+          - app-name: "cashier-service"
     runs-on: ubuntu-latest
+    name: "${{ matrix.app-name }} - build test"
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-java@v5
@@ -21,11 +27,8 @@ jobs:
           distribution: adopt
           java-version: 21
           check-latest: true
-      - name: "Account Service - Executing Build Test"
-        run: | 
-          cd account-service
-          ./gradlew clean build
-      - name: "Balance Service - Executing Build Test"
+      - name: "Executing Build Test"
+        working-directory: ${{ matrix.app-name }}
         run: |
-          cd balance-service
           ./gradlew clean build
+
