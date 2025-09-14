@@ -19,6 +19,7 @@ jobs:
           - app-name: "account-service"
           - app-name: "balance-service"
           - app-name: "cashier-service"
+          - app-name: "transaction-service"
     runs-on: ubuntu-latest
     name: "${{ matrix.app-name }} - build test"
     steps:

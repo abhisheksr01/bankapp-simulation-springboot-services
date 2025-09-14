@@ -22,3 +22,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: postgres
+  resources:
+    add-mappings: true
+  profiles:
+    active: default
