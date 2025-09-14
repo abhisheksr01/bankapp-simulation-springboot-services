@@ -15,7 +15,14 @@ class TransactionConfigurationTest {
     void kafkaAdmin_shouldSetTheSameBootStrapAddress() {
         KafkaAdmin kafkaAdmin = transactionConfiguration.kafkaAdmin();
 
-        Object actual = kafkaAdmin.getConfig().get(BOOTSTRAP_SERVERS_CONFIG);
+        Object actual = null;
+        try {
+            var field = KafkaAdmin.class.getDeclaredField("configs");
+            field.setAccessible(true);
+            actual = ((java.util.Map<?, ?>) field.get(kafkaAdmin)).get(BOOTSTRAP_SERVERS_CONFIG);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         assertEquals("mock-address", actual);
     }

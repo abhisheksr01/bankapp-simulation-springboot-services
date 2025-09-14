@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.util.concurrent.ListenableFuture;
 
+import java.util.concurrent.CompletableFuture;
+
 import static com.service.transaction.helper.TestData.getBalanceUpdateEventMessage;
 import static org.mockito.Mockito.*;
 
@@ -21,7 +23,7 @@ class BalanceUpdateEventProducerTest {
     @Test
     void produceEventMessage_shouldCallTheKafkaTemplate_whenTransactionVOIsPassed() {
         when(mockKafkaTemplate.send(MOCK_TOPIC_NAME, getBalanceUpdateEventMessage())).
-                thenReturn(mock(ListenableFuture.class));
+                thenReturn((CompletableFuture) mock(ListenableFuture.class));
 
         balanceUpdateEventProducer.publishUpdateBalance(getBalanceUpdateEventMessage());
 
