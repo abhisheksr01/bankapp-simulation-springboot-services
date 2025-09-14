@@ -25,3 +25,7 @@ jobs:
         run: | 
           cd account-service
           ./gradlew clean build
+      - name: "Balance Service - Executing Build Test"
+        run: |
+          cd balance-service
+          ./gradlew clean build
