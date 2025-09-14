@@ -1,12 +1,10 @@
 package com.service.balance.service;
 
-import com.service.balance.helper.TestData;
 import com.service.balance.model.BalanceUpdateDAO;
 import com.service.balance.repository.BalanceRepository;
 import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
