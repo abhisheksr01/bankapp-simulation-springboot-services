@@ -3,12 +3,12 @@ package com.service.customer.controller;
 import com.service.customer.model.Customer;
 import com.service.customer.model.CustomerVO;
 import com.service.customer.service.CustomerService;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.ValidatorFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
